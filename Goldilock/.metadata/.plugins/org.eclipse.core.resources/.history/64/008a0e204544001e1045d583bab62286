@@ -1,0 +1,18 @@
+package com.goldilock;
+
+public class Demo {
+	 public static void main(String[] args) {
+	        
+	        java.util.Scanner scanner = new java.util.Scanner(System.in);
+
+	        
+	        while (scanner.hasNextLine()) {
+	            String input = scanner.nextLine();
+	            System.out.println("Received input: " + input);
+	        }
+
+	        
+	        scanner.close();
+	        
+	    }
+}

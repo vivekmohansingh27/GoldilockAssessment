@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome User</title>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #c6e067;
+            margin: 0;
+            padding: 0;
+        }
+        
+        h1 {
+            text-align: center;
+            padding: 20px;
+            color: #333;
+        }
+        
+        button {
+            display: block;
+            margin: 0 auto;
+            padding: 10px 20px;
+            background-color: #d76c0f;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        button:hover {
+            background-color: #340e9c;
+        }
+        
+        button + button {
+            margin-top: 10px;
+        }
+
+        
+        #Table {
+            margin-top: 20px;
+        }
+        
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            background-color: rgb(120, 139, 204);
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            border: 1px solid #272d89;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome User</h1>
+    <button id="view">View All Employees</button>
+    <button id="Logout">Log Out</button>
+    <div id="Table">
+        <table id="user-table">
+            <thead>
+                <tr>
+                    <th>Employee ID</th>
+                    <th>Employee Name</th>
+                    <th>Age</th>
+                    <th>Username</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
+<script>
+
+    const viewList = async ()=>{
+        try {
+        let response = await fetch("http://localhost:8080/users");
+        let data = await response.json();
+        console.log(data);
+
+        const userTable = document.getElementById("user-table").getElementsByTagName('tbody')[0];
+
+                data.forEach(user => {
+                    const row = userTable.insertRow();
+                    row.insertCell(0).textContent = user.empId;
+                    row.insertCell(1).textContent = user.empName;
+                    row.insertCell(2).textContent = user.empAge;
+                    row.insertCell(3).textContent = user.username;
+                });
+
+    } catch (error) {
+        console.error("An error occurred:", error);
+    }
+    }
+
+    document.querySelector("#view").addEventListener("click",viewList);
+
+
+    const logout = () => {
+    //console.log(1);
+    let key = JSON.parse(localStorage.getItem("sessionKey"))
+    //console.log(key);
+
+    userlogout(key);
+
+};
+
+
+
+const logButton = document.querySelector("#Logout");
+
+
+logButton.addEventListener("click", logout);
+
+
+const userlogout = async(key)=>{
+    try {
+        let response = await fetch(`http://localhost:8080/logout?key=${key}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (response.ok) {
+            alert("Logout SuccessFull");
+            window.location.href = "./index.html";
+           
+            let data = await response.json();
+            console.log(data);
+            
+
+            
+        } else {
+            console.error('Request failed with status:', response.status);
+        }
+    } catch (error) {
+        console.error('An error occurred:', error);
+    }
+}
+</script>
+

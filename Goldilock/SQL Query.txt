@@ -1,0 +1,1 @@
+Select * from test where empAge < 30 and empName like 's%';

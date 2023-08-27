@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #c6e067;
+            margin: 0;
+            padding: 0;
+        }
+        
+        h1 {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        form {
+            width: 300px;
+            margin: 0 auto;
+            background-color: rgb(120, 139, 204);
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            box-sizing: border-box;
+        }
+        
+        input[type="submit"] {
+            background-color: #d76c0f;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        
+        input[type="submit"]:hover {
+            background-color: #340e9c;
+        }
+    </style>
+</head>
+<body>
+    <h1>User Login</h1>
+    <form id ="Login-form" action="/login" method="post">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+        
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        
+        <input type="submit" value="Login">
+    </form>
+</body>
+</html>
+<script>
+    const registrationForm = document.getElementById('Login-form');
+
+    registrationForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        
+        let email = document.querySelector("#email").value;
+        let password = document.querySelector("#password").value;
+
+        let obj={
+         
+            "username": email,
+            "password": password
+        }
+        //console.log(obj)
+        
+        LoggedUser(obj);
+        
+    });
+
+    const LoggedUser = async (obj) => {
+    try {
+        let response = await fetch('http://localhost:8080/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(obj)
+        });
+
+        if (response.ok) {
+            
+           
+            let data = await response.json();
+            console.log(data);
+            localStorage.setItem("sessionKey",JSON.stringify(data))
+
+            alert("Login SuccessFull");
+            window.location.href = "./Home.html";
+        } else {
+            console.error('Request failed with status:', response.status);
+        }
+    } catch (error) {
+        console.error('An error occurred:', error);
+    }
+    
+};
+
+</script>
